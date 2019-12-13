@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +13,21 @@
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.17",
-    "jest": "^24.9.0"
+    "@typescript-eslint/eslint-plugin": "^2.11.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "husky": "^3.1.0",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.5.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "!(*.test).ts": [
+      "eslint"
+    ]
   }
 }
