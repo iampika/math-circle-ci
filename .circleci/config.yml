@@ -1,31 +1,21 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/public
     docker:
-      - image: circleci/node:13.3.0
+      - image: circleci/node:12.13.1
+    working_directory: ~/math-circle-ci
     steps:
       - checkout
-      run:
-        name: update-npm
-        command: 'sudo npm install -g npm@latest'
       - restore_cache:
-          key: dependency-cache-{{ checksum: "package.json"}}
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum: "yarn.lock" }}
       - run:
-          name: install-npm-wee
-          command: npm install
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
       - save_cache:
-          key: dependency-cache-{{ checksum: "package.json"}}
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum: "yarn.lock"; }}
           paths:
-            - ./node_modules
-      - run:
-          name: test
-          command: npm test
-      - store-artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store-artifacts:
-          path: coverage
-          prefix: coverage
-      - store_test_results:
-          path: test-results.xml
+            - ~/.cache/yarn
+      -run: yarn test
